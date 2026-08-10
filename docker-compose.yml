@@ -1,0 +1,6 @@
+services:
+  masked-rcnn-api:
+    build: .
+    container_name: masked-rcnn-container
+    ports:
+      - "5000:5000"
