@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: masked-rcnn-api
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: masked-rcnn-api
+
+  template:
+    metadata:
+      labels:
+        app: masked-rcnn-api
+
+    spec:
+      containers:
+        - name: masked-rcnn-api
+          image: masked-rcnn-api:latest
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 5000
