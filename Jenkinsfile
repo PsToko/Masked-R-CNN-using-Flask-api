@@ -1,6 +1,9 @@
 pipeline {
-agent any
-
+agent {
+docker {
+image 'python:3.12'
+}
+}
 
 stages {
 
@@ -21,12 +24,7 @@ stages {
             sh 'pytest'
         }
     }
-
-    stage('Build Docker Image') {
-        steps {
-            sh 'docker build -t masked-rcnn-api:latest .'
-        }
-    }
 }
+
 
 }
