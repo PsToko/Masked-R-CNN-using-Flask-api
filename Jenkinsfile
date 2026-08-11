@@ -1,30 +1,33 @@
 pipeline {
-    agent any
+agent any
 
-    stages {
+```
+stages {
 
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
-        stage('Install Dependencies') {
-            steps {
-                bat 'pip install -r requirements.txt'
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
-                bat 'pytest'
-            }
-        }
-
-        stage('Build Docker Image') {
-            steps {
-                bat 'docker build -t masked-rcnn-api:latest .'
-            }
+    stage('Checkout') {
+        steps {
+            checkout scm
         }
     }
+
+    stage('Install Dependencies') {
+        steps {
+            sh 'pip install -r requirements.txt'
+        }
+    }
+
+    stage('Run Tests') {
+        steps {
+            sh 'pytest'
+        }
+    }
+
+    stage('Build Docker Image') {
+        steps {
+            sh 'docker build -t masked-rcnn-api:latest .'
+        }
+    }
+}
+```
+
 }
