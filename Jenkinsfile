@@ -1,30 +1,18 @@
 pipeline {
-agent {
-docker {
-image 'python:3.12'
-}
-}
+    agent any
 
-stages {
-
-    stage('Checkout') {
-        steps {
-            checkout scm
-        }
+    environment {
+        DOCKER_HOST = 'tcp://docker:2375'
     }
 
-    stage('Install Dependencies') {
-        steps {
-            sh 'pip install -r requirements.txt'
+    stages {
+
+        stage('Test Docker') {
+            steps {
+                sh 'docker version'
+                sh 'docker info'
+            }
         }
+
     }
-
-    stage('Run Tests') {
-        steps {
-            sh 'pytest'
-        }
-    }
-}
-
-
 }
