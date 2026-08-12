@@ -11,35 +11,35 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 
+                sh '''
                     python3 -m venv .venv
                     .venv/bin/pip install --upgrade pip
                     .venv/bin/pip install -r requirements.txt
-                
+                '''
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 
+                sh '''
                     .venv/bin/pytest
-                
+                '''
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 
+                sh '''
                     docker build -t localhost:5001/masked-rcnn-api:latest .
-                
+                '''
             }
         }
 
         stage('Push Docker Image') {
             steps {
-                sh 
+                sh '''
                     docker push localhost:5001/masked-rcnn-api:latest
-                
+                '''
             }
         }
     }
