@@ -19,7 +19,8 @@ spec:
     spec:
       containers:
         - name: masked-rcnn-api
-          image: localhost:5001/masked-rcnn-api:v2
+          image: host.docker.internal:5001/masked-rcnn-api:latest
+          imagePullPolicy: Always
 
           ports:
             - containerPort: 5000

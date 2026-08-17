@@ -112,10 +112,18 @@ class MaskRCNNPredictor:
             "cuda" if torch.cuda.is_available() else "cpu"
         )
 
-        weights = MaskRCNN_ResNet50_FPN_Weights.DEFAULT
+        weights_path = "/app/model/maskrcnn_resnet50_fpn_coco-bf2d0c1e.pth"
 
         self.model = maskrcnn_resnet50_fpn(
-            weights=weights
+            weights=None
+        )
+
+        self.model.load_state_dict(
+            torch.load(
+                weights_path,
+                map_location=self.device,
+                weights_only=True
+            )
         )
 
         self.model.to(self.device)
