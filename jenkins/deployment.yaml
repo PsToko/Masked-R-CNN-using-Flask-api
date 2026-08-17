@@ -19,41 +19,48 @@ spec:
     spec:
       containers:
 
-        # Jenkins
-        - name: jenkins
-          image: localhost:5001/my-jenkins-python:latest
-          imagePullPolicy: Always
+      - name: jenkins
+        image: localhost:5001/my-jenkins-python:latest
+        imagePullPolicy: Always
 
-          env:
-            - name: DOCKER_HOST
-              value: tcp://localhost:2375
+        env:
+        - name: DOCKER_HOST
+          value: tcp://localhost:2375
 
-          ports:
-            - containerPort: 8080
-            - containerPort: 50000
+        ports:
+        - containerPort: 8080
+        - containerPort: 50000
 
-          volumeMounts:
-            - name: jenkins-home
-              mountPath: /var/jenkins_home
+        volumeMounts:
+        - name: jenkins-home
+          mountPath: /var/jenkins_home
 
-        # Docker daemon
-        - name: docker
-          image: docker:26-dind
 
-          securityContext:
-            privileged: true
+      - name: docker
+        image: docker:26-dind
 
-          env:
-            - name: DOCKER_TLS_CERTDIR
-              value: ""
+        env:
+        - name: DOCKER_TLS_CERTDIR
+          value: ""
 
-          volumeMounts:
-            - name: docker-storage
-              mountPath: /var/lib/docker
+        command:
+        - dockerd
+        - --host=tcp://0.0.0.0:2375
+        - --host=unix:///var/run/docker.sock
+        - --insecure-registry=host.docker.internal:5001
+
+        securityContext:
+          privileged: true
+
+        volumeMounts:
+        - name: docker-storage
+          mountPath: /var/lib/docker
+
 
       volumes:
-        - name: jenkins-home
-          emptyDir: {}
 
-        - name: docker-storage
-          emptyDir: {}
+      - name: jenkins-home
+        emptyDir: {}
+
+      - name: docker-storage
+        emptyDir: {}
