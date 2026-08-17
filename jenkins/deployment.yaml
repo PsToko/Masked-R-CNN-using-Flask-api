@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: jenkins
   namespace: jenkins
+
 spec:
   replicas: 1
 
@@ -17,8 +18,15 @@ spec:
 
     spec:
       containers:
+
+        # Jenkins
         - name: jenkins
-          image: jenkins/jenkins:lts
+          image: localhost:5001/my-jenkins-python:latest
+          imagePullPolicy: Always
+
+          env:
+            - name: DOCKER_HOST
+              value: tcp://localhost:2375
 
           ports:
             - containerPort: 8080
@@ -28,6 +36,24 @@ spec:
             - name: jenkins-home
               mountPath: /var/jenkins_home
 
+        # Docker daemon
+        - name: docker
+          image: docker:26-dind
+
+          securityContext:
+            privileged: true
+
+          env:
+            - name: DOCKER_TLS_CERTDIR
+              value: ""
+
+          volumeMounts:
+            - name: docker-storage
+              mountPath: /var/lib/docker
+
       volumes:
         - name: jenkins-home
+          emptyDir: {}
+
+        - name: docker-storage
           emptyDir: {}
