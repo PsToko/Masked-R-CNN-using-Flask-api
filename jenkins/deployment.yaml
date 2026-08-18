@@ -48,6 +48,8 @@ spec:
         - --host=tcp://0.0.0.0:2375
         - --host=unix:///var/run/docker.sock
         - --insecure-registry=host.docker.internal:5001
+        - --dns=1.1.1.1
+        - --dns=8.8.8.8
 
         securityContext:
           privileged: true
