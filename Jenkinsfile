@@ -24,5 +24,21 @@ pipeline {
                 '''
             }
         }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh '''
+                    kubectl apply -f k8s/deployment.yaml
+                '''
+            }
+        }
+
+        stage('Rollout Status') {
+            steps {
+                sh '''
+                    kubectl rollout status deployment/masked-rcnn-api
+                '''
+            }
+        }
     }
 }
